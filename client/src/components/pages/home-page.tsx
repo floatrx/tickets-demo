@@ -1,6 +1,6 @@
 import { useListTicketsQuery } from '@/api/tickets';
 
-export const App = () => {
+export const Home = () => {
   const { data } = useListTicketsQuery();
   return (
     <section>
