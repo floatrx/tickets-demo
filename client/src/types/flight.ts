@@ -9,12 +9,7 @@ interface Direction {
   name: string;
 }
 
-interface Airline {
-  id: number;
-  name: string;
-}
-
-export interface Flights {
+export interface FlightDetails {
   id: number;
   number: string;
   departureTime: string;
@@ -24,12 +19,11 @@ export interface Flights {
   directionId: number;
 }
 
-export interface FlightsExtended extends Flights {
-  airline: Airline;
+export interface FlightDetailsExtended extends FlightDetails {
   direction: Direction;
   transfers: Transfer[];
 }
 
-export interface CreateFlightBody extends Omit<Flights, 'id'> {
+export interface CreateFlightBody extends Omit<FlightDetails, 'id'> {
   transferIds: number[];
 }

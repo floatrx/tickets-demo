@@ -1,10 +1,16 @@
-import { router } from '@/components/router/app-router';
-import { store } from '@/store/store';
-import { Provider } from 'react-redux';
-import { RouterProvider } from 'react-router-dom';
+import { Route, Routes } from 'react-router';
+import { Home } from '@/components/pages/home-page';
+import { Layout } from '@/components/layout/layout';
+import { NotFound } from '@/components/pages/not-found';
+import { Providers } from '@/components/providers';
 
 export const App = () => (
-  <Provider store={store}>
-    <RouterProvider router={router} />
-  </Provider>
+  <Providers>
+    <Layout>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </Layout>
+  </Providers>
 );

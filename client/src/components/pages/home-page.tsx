@@ -1,13 +1,7 @@
-import { useListTicketsQuery } from '@/api/tickets';
+import { TicketsList } from '@/components/features/ticket/tickets-list';
 
-export const Home = () => {
-  const { data } = useListTicketsQuery();
-  return (
-    <section>
-      <h1>Tickets (test)</h1>
-      <pre>
-        <code>{JSON.stringify(data, null, 2)}</code>
-      </pre>
-    </section>
-  );
-};
+export const Home = () => (
+  <section className="space-y-2">
+    <TicketsList />
+  </section>
+);

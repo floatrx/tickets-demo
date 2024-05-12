@@ -1,9 +1,16 @@
-import type { CreateFlightBody, FlightsExtended } from '@/types/flights';
+import type { CreateFlightBody, FlightDetailsExtended } from '@/types/flight';
+
+interface Airline {
+  id: number;
+  name: string;
+  logo: string;
+}
 
 export interface ITicket {
   id: number;
   price: number;
-  flights: FlightsExtended[];
+  airline: Airline;
+  flights: FlightDetailsExtended[];
 }
 
 export interface ITicketCreate {

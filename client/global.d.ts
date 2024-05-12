@@ -1,3 +1,5 @@
+import type { FunctionComponent, PropsWithChildren } from 'react';
+
 declare global {
   namespace NodeJS {
     interface ProcessEnv {
@@ -6,4 +8,8 @@ declare global {
       VITE_API_BASE_URL: string;
     }
   }
+}
+
+declare global {
+  type FC<T = object> = FunctionComponent<PropsWithChildren<T>>;
 }
