@@ -1,0 +1,47 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Airline {
+  id      Int      @id @default(autoincrement())
+  name    String   @unique
+  flights Flight[] // Automatically relate to tickets through flights
+}
+
+model Transfer {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  description String?
+  flights     Flight[] @relation("FlightTransfers")
+}
+
+model Flight {
+  id            Int        @id @default(autoincrement())
+  number        String     @unique
+  departureTime DateTime   @default(now())
+  arrivalTime   DateTime   @default(now())
+  duration      Int
+  airline       Airline    @relation(fields: [airlineId], references: [id])
+  airlineId     Int
+  direction     Direction  @relation(fields: [directionId], references: [id])
+  directionId   Int
+  tickets       Ticket[]   @relation("FlightTickets") // Many-to-many relation
+  transfers     Transfer[] @relation("FlightTransfers")
+}
+
+model Ticket {
+  id      Int      @id @default(autoincrement())
+  flights Flight[] @relation("FlightTickets") // Many-to-many relation
+  price   Int
+}
+
+model Direction {
+  id      Int      @id @default(autoincrement())
+  name    String   @unique
+  flights Flight[]
+}

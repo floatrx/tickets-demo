@@ -1,0 +1,16 @@
+{
+  "name": "aviasales",
+  "version": "0.0.0",
+  "private": true,
+  "license": "ISC",
+  "scripts": {
+    "client": "cd client && yarn dev",
+    "server": "cd server && yarn dev",
+    "dev": "concurrently -n 'app,api' -c 'magenta,green.bold' 'yarn server' 'yarn client'",
+    "pretty": "prettier --write ."
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "prettier": "^3.2.5"
+  }
+}

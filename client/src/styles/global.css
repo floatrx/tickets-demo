@@ -1,0 +1,16 @@
+:root {
+    /* Variables */
+    --primary-color: #646cff;
+    --background-color: #fafafa;
+    --foreground-color: #000;
+
+    font-family: "Open Sans", sans-serif;
+    line-height: 1.5;
+    font-weight: 400;
+    color: var(--foreground-color);
+    background-color: var(--background-color);
+    font-synthesis: none;
+    text-rendering: optimizelegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
