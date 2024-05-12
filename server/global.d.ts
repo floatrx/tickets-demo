@@ -8,6 +8,6 @@ declare global {
   }
 }
 
-declare interface IErrorResponse {
+declare interface IErrorMessage {
   message: string; // error message
 }

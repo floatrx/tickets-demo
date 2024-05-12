@@ -6,7 +6,7 @@
   "scripts": {
     "client": "cd client && yarn dev",
     "server": "cd server && yarn dev",
-    "dev": "concurrently -n 'app,api' -c 'magenta,green.bold' 'yarn server' 'yarn client'",
+    "dev": "concurrently -n 'server,client' -c 'magenta,green.bold' 'yarn server' 'yarn client'",
     "pretty": "prettier --write ."
   },
   "devDependencies": {
