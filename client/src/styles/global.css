@@ -1,3 +1,6 @@
+@import url("normalize.css");
+@import url("variables.css");
+
 :root {
     /* Variables */
     --primary-color: #646cff;

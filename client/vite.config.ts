@@ -30,6 +30,6 @@ export default defineConfig(({ mode }) => {
       minify: true,
       sourcemap: false,
     },
-    plugins: [react(), stylelint({ fix: true, lintOnStart: true })],
+    plugins: [react(), stylelint({ fix: true })],
   };
 });
