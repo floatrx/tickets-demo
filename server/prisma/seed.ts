@@ -5,9 +5,9 @@ console.log('Seeding database...');
 const prisma = new PrismaClient();
 
 const airlines: Prisma.AirlineCreateInput[] = [
-  { name: 'Airline4Europe' },
-  { name: 'Turkish Airlines' },
-  { name: 'Emirates' },
+  { name: 'Airline4Europe', logo: 'a4e.svg' },
+  { name: 'Turkish Airlines', logo: 'turkish.svg' },
+  { name: 'Emirates', logo: 'emirates.svg' },
 ];
 
 const directions: Prisma.DirectionCreateInput[] = [{ name: 'Outbound' }, { name: 'Return' }];
@@ -21,20 +21,18 @@ const transfers: Prisma.TransferCreateInput[] = [
 const flights: Prisma.FlightCreateInput[] = [
   {
     number: 'F4U-001',
-    airline: { connect: { id: 1 } }, // Airline4Europe
-    departureTime: new Date('2022-01-01T08:00:00Z'),
-    arrivalTime: new Date('2022-01-01T10:00:00Z'),
+    departureTime: new Date('2022-01-01T00:00:00Z'),
+    arrivalTime: new Date('2022-01-01T00:00:00Z'),
+    duration: 1440,
     direction: { connect: { id: 1 } }, // Outbound
-    duration: 120,
     transfers: { connect: [{ id: 1 }] }, // HKG
   },
   {
     number: 'F4U-002',
-    airline: { connect: { id: 1 } },
-    departureTime: new Date('2022-01-01T08:00:00Z'),
-    arrivalTime: new Date('2022-01-01T10:00:00Z'),
+    departureTime: new Date('2022-01-10T00:00:00Z'),
+    arrivalTime: new Date('2022-01-10T06:00:00Z'),
+    duration: 360,
     direction: { connect: { id: 2 } }, // Return
-    duration: 120,
     transfers: { connect: [{ id: 1 }] },
   },
 ];
@@ -42,6 +40,7 @@ const flights: Prisma.FlightCreateInput[] = [
 const tickets: Prisma.TicketCreateInput[] = [
   {
     price: 13300,
+    airline: { connect: { id: 1 } }, // Airline4Europe
     flights: {
       // Attach flights to the ticket
       connect: [

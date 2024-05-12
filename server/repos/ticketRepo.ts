@@ -1,13 +1,16 @@
 import { prisma } from '@/lib/prisma';
 import { transformFlights } from '@/lib/transform';
 import type { TicketCreateBody } from '@/types';
-import type { Ticket } from '@prisma/client';
+import type { Prisma, Ticket } from '@prisma/client';
 
 // Include related data in the response
-const include = {
+const include: Prisma.TicketInclude = {
+  airline: true, // Include the airline data
   flights: {
+    orderBy: {
+      directionId: 'asc', // Outbound first
+    },
     include: {
-      airline: true, // Include the airline data
       direction: true, // Include the direction data
       transfers: true, // Include transfers if any
     },
@@ -19,11 +22,12 @@ const include = {
  */
 export const ticketRepo = {
   create(body: TicketCreateBody) {
-    const { flights, price = 0 } = body;
+    const { flights, airlineId, price = 0 } = body;
     return prisma.ticket.create({
       include, // Include the related data
       data: {
         price,
+        airline: { connect: { id: airlineId } },
         flights: {
           create: flights.map(transformFlights),
         },
@@ -34,7 +38,7 @@ export const ticketRepo = {
     return prisma.ticket.findUnique({ where: { id }, include });
   },
   list() {
-    return prisma.ticket.findMany({ include });
+    return prisma.ticket.findMany({ include, orderBy: { id: 'desc' } });
   },
   update(id: number, data: Omit<Ticket, 'id'>) {
     return prisma.ticket.update({ where: { id }, data, include });
