@@ -3,7 +3,8 @@ import { Prisma } from '@prisma/client';
 
 type TransformFlightFn = (body: FlightCreateBody) => Prisma.FlightCreateInput;
 
-const diffBetweenDates = (departure: Date, arrival: Date) => (arrival.getTime() - departure.getTime()) / (1000 * 60);
+export const diffBetweenDates = (departure: Date, arrival: Date) =>
+  new Date(arrival).getTime() - new Date(departure).getTime();
 
 /**
  * Transform flight data for Prisma
@@ -12,7 +13,8 @@ export const transformFlights: TransformFlightFn = ({ number, departureTime, arr
   number,
   departureTime,
   arrivalTime,
-  duration: diffBetweenDates(new Date(departureTime), new Date(arrivalTime)),
-  direction: { connect: { id: f.directionId } },
+  duration: diffBetweenDates(departureTime, arrivalTime),
   transfers: { connect: f.transferIds.map((id: number) => ({ id })) },
+  from: { connect: { id: f.fromId } },
+  to: { connect: { id: f.toId } },
 });

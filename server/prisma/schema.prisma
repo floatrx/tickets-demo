@@ -7,42 +7,49 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Country {
+  id          Int      @id @default(autoincrement())
+  code        String   @unique
+  name        String   @unique
+  description String?
+  departures  Flight[] @relation("FlightFromCountry") // Many-to-many relation
+  arrivals    Flight[] @relation("FlightToCountry") // Many-to-many relation
+  transfers   Flight[] @relation("FlightTransfers") // Many-to-many relation
+}
+
 model Airline {
   id      Int      @id @default(autoincrement())
   name    String   @unique
   logo    String?
-  tickets Ticket[]
-}
-
-model Transfer {
-  id          Int      @id @default(autoincrement())
-  name        String   @unique
-  description String?
-  flights     Flight[] @relation("FlightTransfers")
+  tickets Ticket[] @relation("TicketAirline") // Many-to-many relation
 }
 
 model Flight {
-  id            Int        @id @default(autoincrement())
-  number        String     @unique
-  departureTime DateTime   @default(now())
-  arrivalTime   DateTime   @default(now())
+  id            Int       @id @default(autoincrement())
+  number        String    @unique
+  departureTime DateTime  @default(now())
+  arrivalTime   DateTime  @default(now())
   duration      Int?
-  direction     Direction  @relation(fields: [directionId], references: [id])
-  directionId   Int
-  tickets       Ticket[]   @relation("FlightTickets") // Many-to-many relation
-  transfers     Transfer[] @relation("FlightTransfers")
+  tickets       Ticket[]  @relation("FlightTickets") // Many-to-many relation
+  transfers     Country[] @relation("FlightTransfers") // Many-to-many relation
+  from          Country   @relation("FlightFromCountry", fields: [fromId], references: [id])
+  fromId        Int
+  to            Country   @relation("FlightToCountry", fields: [toId], references: [id])
+  toId          Int
 }
 
 model Ticket {
   id        Int      @id @default(autoincrement())
   flights   Flight[] @relation("FlightTickets") // Many-to-many relation
-  airline   Airline  @relation(fields: [airlineId], references: [id])
-  airlineId Int
   price     Int
+  airline   Airline  @relation("TicketAirline", fields: [airlineId], references: [id])
+  airlineId Int
 }
 
-model Direction {
-  id      Int      @id @default(autoincrement())
-  name    String   @unique
-  flights Flight[]
-}
+// model Direction {
+//   id        Int       @id @default(autoincrement())
+//   countryId Int
+//   countries Country[] @relation("DirectionCountry")
+//   Flight    Flight[]
+//   Flight    Flight[]
+// }

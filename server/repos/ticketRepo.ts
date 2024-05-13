@@ -1,17 +1,16 @@
 import { prisma } from '@/lib/prisma';
 import { transformFlights } from '@/lib/transform';
-import type { TicketCreateBody } from '@/types';
+import type { ITicketFilters, TicketCreateBody } from '@/types';
 import type { Prisma, Ticket } from '@prisma/client';
 
 // Include related data in the response
 const include: Prisma.TicketInclude = {
   airline: true, // Include the airline data
   flights: {
-    orderBy: {
-      directionId: 'asc', // Outbound first
-    },
+    orderBy: { departureTime: 'asc' }, // Order flights by departure time
     include: {
-      direction: true, // Include the direction data
+      from: true, // Include the "from" country
+      to: true, // Include the "to" country
       transfers: true, // Include transfers if any
     },
   },
@@ -34,11 +33,76 @@ export const ticketRepo = {
       },
     });
   },
-  get(id: number) {
-    return prisma.ticket.findUnique({ where: { id }, include });
+  get(id: string) {
+    return prisma.ticket.findUnique({ where: { id: Number(id) }, include });
   },
-  list() {
-    return prisma.ticket.findMany({ include, orderBy: { id: 'desc' } });
+  async list(query: ITicketFilters) {
+    /**
+     * Get search params from request
+     * @param sort = 'price' (default) | 'duration' | 'optimal'
+     * @param filter = 'all' (default) | 'transfers' + required transferCount
+     * @param transferCount = ['0', '1', '2', '3'] string[] | 0 or 1 or 2 or 3 (number)
+     */
+    const { sort, filter, transferCount = [], limit } = query;
+
+    const ticketsCount = await prisma.ticket.count(); // Get the total number of tickets
+
+    const tickets = await prisma.ticket.findMany({
+      include,
+      take: Number(limit) || 5, // Limit the number of tickets
+    });
+
+    // Map tickets to include total duration
+    let ticketsExtended = tickets.map(({ id, ...ticket }) => {
+      const totalDuration = ticket.flights.reduce((acc, flight) => acc + (flight.duration || 0), 0);
+
+      // @ts-ignore
+      const totalTransfers = ticket.flights[0].transfers.length; // Get the number of transfers -> first flight (all flights have the same number of transfers)
+
+      // Calculate the custom coefficient K
+      const optimalIdx = ((totalDuration + 2 * totalTransfers + 3 * ticket.price) / 1000000).toFixed();
+
+      return {
+        id,
+        optimalIdx,
+        totalTransfers,
+        totalDuration,
+        ...ticket,
+      };
+    });
+
+    /**
+     * Sort tickets
+     * @param sort = 'price' | 'duration' | 'optimal'
+     */
+    ticketsExtended.sort((a, b) => {
+      switch (sort) {
+        case 'duration':
+          return b.totalDuration - a.totalDuration; // sort by duration
+        case 'optimal':
+          return Number(a.optimalIdx) - Number(b.optimalIdx); // sort by custom coefficient K
+        default:
+          return a.price - b.price; // sort by price
+      }
+    });
+
+    /**
+     * Filter by transfers
+     * @param filter = 'transfers'
+     * @param transferCount = ['0', '1', '2', '3'] string[] | 0 or 1 or 2 or 3 (number)
+     */
+    if (filter === 'transfers' && transferCount) {
+      ticketsExtended = ticketsExtended.filter((ticket) => {
+        // Multiple transfer options checked
+        if (Array.isArray(transferCount)) {
+          return transferCount.includes(String(ticket.totalTransfers));
+        }
+        // Single transfer option checked
+        return ticket.totalTransfers === Number(transferCount);
+      });
+    }
+
+    return { data: ticketsExtended, total: ticketsCount };
   },
   update(id: number, data: Omit<Ticket, 'id'>) {
     return prisma.ticket.update({ where: { id }, data, include });
