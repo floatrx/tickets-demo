@@ -1,0 +1,16 @@
+.wrapper {
+    @apply grid gap-5;
+    @apply grid-cols-2 lg:grid-cols-3;
+}
+
+.column {
+    @apply flex flex-col gap-1;
+
+    span {
+        @apply text-muted-foreground text-sm;
+    }
+
+    p {
+        @apply font-medium;
+    }
+}

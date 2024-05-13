@@ -1,0 +1,23 @@
+.wrapper {
+    @apply transition-all mb-4;
+
+    &:hover {
+        @apply shadow-md translate-y-[2px];
+    }
+}
+
+.header {
+    @apply flex justify-between items-center;
+
+    .price {
+        @apply font-medium text-2xl;
+    }
+
+    .logo {
+        width: 130px;
+    }
+}
+
+.footer {
+    @apply grid grid-cols-3 gap-4;
+}

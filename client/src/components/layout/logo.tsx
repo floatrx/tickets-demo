@@ -1,8 +1,11 @@
+// Styles
+import s from './logo.module.css';
+
 export const Logo = () => {
   return (
-    <span className="relative size-[60px] flex items-center justify-center">
-      <img src="/logo/globe.svg" alt="logo-globe" />
-      <img className="absolute inset-1" src="/logo/plane.svg" alt="logo-globe" />
+    <span className={s.wrapper}>
+      <img className={s.globe} src="/logo/globe.svg" alt="logo-globe" />
+      <img className={s.plane} src="/logo/plane.svg" alt="logo-globe" />
     </span>
   );
 };

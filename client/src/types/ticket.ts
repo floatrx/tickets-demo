@@ -11,9 +11,22 @@ export interface ITicket {
   price: number;
   airline: Airline;
   flights: FlightDetailsExtended[];
+  totalDuration: number;
+  totalTransfers: number;
+  optimalIdx: number; // custom coefficient for optimal sorting
 }
 
 export interface ITicketCreate {
   price: number;
   flights: [CreateFlightBody, CreateFlightBody?];
+}
+
+export type ITicketSort = 'price' | 'duration' | 'transfers' | 'optimal' | null;
+export type TicketFilter = 'all' | 'transfers' | null;
+
+export interface ITicketListFilters {
+  limit?: number;
+  sort: ITicketSort;
+  filter?: TicketFilter;
+  transferCount?: number[] | null;
 }

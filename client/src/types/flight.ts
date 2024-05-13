@@ -1,13 +1,4 @@
-interface Transfer {
-  id: number;
-  name: string;
-  description: string;
-}
-
-interface Direction {
-  id: number;
-  name: string;
-}
+import type { Country } from '@/types/country';
 
 export interface FlightDetails {
   id: number;
@@ -16,14 +7,14 @@ export interface FlightDetails {
   arrivalTime: string;
   duration: number;
   airlineId: number;
-  directionId: number;
+  fromId: number;
+  toId: number;
 }
 
 export interface FlightDetailsExtended extends FlightDetails {
-  direction: Direction;
-  transfers: Transfer[];
+  transfers: Country[];
+  from: Country;
+  to: Country;
 }
 
-export interface CreateFlightBody extends Omit<FlightDetails, 'id'> {
-  transferIds: number[];
-}
+export interface CreateFlightBody extends Omit<FlightDetails, 'id'> {}

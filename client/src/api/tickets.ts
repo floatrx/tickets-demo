@@ -1,15 +1,16 @@
 import { api } from '@/api/index';
 
-import type { ITicket, ITicketCreate } from '@/types/ticket';
+import type { ITicket, ITicketCreate, ITicketListFilters } from '@/types/ticket';
 
 const path = '/tickets';
 const type = 'Ticket';
 
 const injectedRtkApi = api.injectEndpoints({
   endpoints: ({ query, mutation }) => ({
-    listTickets: query<ITicket[], void>({
-      query: () => ({ url: path }),
+    listTickets: query<SearchResults<ITicket>, ITicketListFilters>({
+      query: (params) => ({ url: path, params }),
       providesTags: [type],
+      keepUnusedDataFor: 0,
     }),
     getTicket: query<ITicket, string | undefined>({
       query: (id) => `${path}/${id}`,

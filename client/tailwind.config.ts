@@ -13,7 +13,6 @@ const config: Config = {
         lg: '3rem',
       },
       screens: {
-        sm: '640px',
         md: '860px',
       },
     },

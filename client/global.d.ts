@@ -1,3 +1,4 @@
+import { glob } from 'glob';
 import type { FunctionComponent, PropsWithChildren } from 'react';
 
 declare global {
@@ -12,4 +13,8 @@ declare global {
 
 declare global {
   type FC<T = object> = FunctionComponent<PropsWithChildren<T>>;
+  type SearchResults<T> = {
+    data: T[];
+    total: number;
+  };
 }

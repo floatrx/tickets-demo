@@ -1,0 +1,28 @@
+.wrapper {
+    @apply flex gap-5;
+}
+
+.spinner {
+    @apply absolute inset-0 flex items-center justify-center bg-white bg-opacity-90 min-h-screen;
+}
+
+.toggle {
+    @apply cursor-pointer absolute bottom-2 right-2 md:hidden size-9 p-1.5 rounded-md text-muted-foreground;
+
+    .collapsed & {
+        @apply -right-10 rotate-180 bg-primary text-primary-foreground;
+    }
+}
+
+.aside {
+    @apply min-w-[230px] h-auto fixed top-5 left-1 self-start z-10 transition-all;
+    @apply md:sticky;
+
+    .title {
+        @apply text-lg font-medium mb-4;
+    }
+
+    .collapsed & {
+        @apply -translate-x-full;
+    }
+}

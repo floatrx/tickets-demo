@@ -10,7 +10,7 @@ export const Layout = (props: Required<PropsWithChildren>) => {
       <main className="container my-8 flex-1">{props.children}</main>
 
       <footer className="border-t">
-        <div className="container p-4 text-xs text-gray-400">
+        <div className="container p-4 text-xs text-gray-400 text-center">
           <p>
             © 2024 AviaSales {' | '}
             <a
