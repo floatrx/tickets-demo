@@ -2,16 +2,19 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { useCallback } from 'react';
 
+// Styles
+import s from './filter-transfers.module.css';
+
 interface IProps {
   onChange?: (filters: number[]) => void;
 }
 
 // Available transfers filter options
 const transfers = [
-  { id: 0, label: 'Without transfers', name: '0' },
-  { id: 1, label: '1 transfer', name: '1' },
-  { id: 2, label: '2 transfers', name: '2' },
-  { id: 3, label: '3 transfers', name: '3' },
+  { id: 0, label: 'Without transfers', value: '0' },
+  { id: 1, label: '1 transfer', value: '1' },
+  { id: 2, label: '2 transfers', value: '2' },
+  { id: 3, label: '3 transfers', value: '3' },
 ];
 
 /**
@@ -42,9 +45,9 @@ export const FilterTransfers: FC<IProps> = ({ onChange }) => {
 
   return (
     <form onChange={handleFilters}>
-      {transfers.map(({ id, label, name }) => (
-        <Label key={id} className="stack gap-2 mb-4 text-md">
-          <Checkbox name="transfers" value={name} className="size-6" />
+      {transfers.map(({ id, label, value }) => (
+        <Label key={id} className={s.label}>
+          <Checkbox value={value} className={s.checkbox} />
           {label}
         </Label>
       ))}

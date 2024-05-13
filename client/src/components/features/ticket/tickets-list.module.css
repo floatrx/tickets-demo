@@ -2,6 +2,18 @@
     @apply flex gap-5;
 }
 
+.main {
+    @apply flex-auto;
+
+    .sort {
+        @apply mb-4;
+    }
+
+    .more {
+        @apply w-full;
+    }
+}
+
 .spinner {
     @apply absolute inset-0 flex items-center justify-center bg-white bg-opacity-90 min-h-screen;
 }
@@ -24,5 +36,9 @@
 
     .collapsed & {
         @apply -translate-x-full;
+    }
+
+    .footer {
+        @apply text-muted-foreground text-sm;
     }
 }

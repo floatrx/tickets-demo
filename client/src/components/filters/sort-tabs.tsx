@@ -38,7 +38,6 @@ export const SortTabs: FC<IProps> = ({ onChange, className }) => {
         >
           <input
             type="radio"
-            name="variant"
             value={String(variant.value)}
             checked={variant.value === value}
             onChange={() => handleChange(variant.value)}

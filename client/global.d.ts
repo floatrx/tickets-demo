@@ -1,4 +1,3 @@
-import { glob } from 'glob';
 import type { FunctionComponent, PropsWithChildren } from 'react';
 
 declare global {

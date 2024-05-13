@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { FlightInfo } from '@/components/features/flight/flight-info';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
-import { Currency } from '@/components/ui/Currency';
+import { Currency } from '@/components/ui/currency';
 import { Duration } from '@/components/ui/duration';
 
 import type { ITicket } from '@/types/ticket';
