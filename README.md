@@ -2,6 +2,8 @@
 
 ## Description
 
+Demo: [https://tickets.floatrx.net/](https://tickets.floatrx.net/)
+
 Server: `Node`, `Express`, `SQLite`, `Prisma`
 
 Client: `React`, `Redux`, `Redux toolkit`, `ShadCN`, `TailwindCSS`
@@ -25,6 +27,12 @@ cp .env.example .env
 
 ```bash
 yarn dev
+```
+
+### Check database
+```bash
+cd server
+yarn db:view
 ```
 
 # Comments
