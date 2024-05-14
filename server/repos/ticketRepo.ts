@@ -59,8 +59,8 @@ export const ticketRepo = {
       // @ts-ignore
       const totalTransfers = ticket.flights[0].transfers.length; // Get the number of transfers -> first flight (all flights have the same number of transfers)
 
-      // Calculate the custom coefficient K
-      const optimalIdx = ((totalDuration + 2 * totalTransfers + 3 * ticket.price) / 1000000).toFixed();
+      // Calculate the custom coefficient optimalIdx
+      const optimalIdx = (totalDuration / 1000000 + 2 * totalTransfers + 3 * ticket.price).toFixed();
 
       return {
         id,
