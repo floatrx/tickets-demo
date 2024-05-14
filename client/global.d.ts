@@ -14,6 +14,7 @@ declare global {
   type FC<T = object> = FunctionComponent<PropsWithChildren<T>>;
   type SearchResults<T> = {
     data: T[];
-    total: number;
+    total: number; // total count
+    count: number; // filtered count
   };
 }

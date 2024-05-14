@@ -45,7 +45,7 @@ export const TicketsList = () => {
       </div>
     );
 
-  const { data: tickets } = searchResults;
+  const { data: tickets, total, count } = searchResults;
 
   return (
     <div className={cn(s.wrapper, { [s.collapsed]: collapseFilters })}>
@@ -58,7 +58,7 @@ export const TicketsList = () => {
             </div>
             <FilterTransfers onChange={handleFilterChange} />
             <div className={s.footer}>
-              Found tickets <strong>{tickets?.length}</strong>
+              Found tickets <strong>{count !== total ? `${count}/${total}` : 'all'}</strong>
             </div>
           </CardHeader>
         </Card>
@@ -73,9 +73,11 @@ export const TicketsList = () => {
         />
         <div>
           {tickets?.map((ticket) => <TicketCard key={ticket.id} ticket={ticket} />)}
-          <button className={cn(s.more, 'button button-primary')} onClick={() => setLimit((prev) => prev + 5)}>
-            Load more
-          </button>
+          {total > tickets.length && (
+            <button className={cn(s.more, 'button button-primary')} onClick={() => setLimit((prev) => prev + 5)}>
+              Load more
+            </button>
+          )}
         </div>
       </div>
     </div>

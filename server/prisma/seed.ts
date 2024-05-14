@@ -42,6 +42,7 @@ const tickets: Prisma.TicketCreateInput[] = [
   {
     price: 13300,
     airline: { connect: { id: 1 } }, // Airline4Europe
+    totalTransfers: 1,
     flights: {
       // Attach flights to the ticket
       connect: [

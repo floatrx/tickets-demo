@@ -39,17 +39,10 @@ model Flight {
 }
 
 model Ticket {
-  id        Int      @id @default(autoincrement())
-  flights   Flight[] @relation("FlightTickets") // Many-to-many relation
-  price     Int
-  airline   Airline  @relation("TicketAirline", fields: [airlineId], references: [id])
-  airlineId Int
+  id             Int      @id @default(autoincrement())
+  flights        Flight[] @relation("FlightTickets") // Many-to-many relation
+  totalTransfers Int
+  price          Int
+  airline        Airline  @relation("TicketAirline", fields: [airlineId], references: [id])
+  airlineId      Int
 }
-
-// model Direction {
-//   id        Int       @id @default(autoincrement())
-//   countryId Int
-//   countries Country[] @relation("DirectionCountry")
-//   Flight    Flight[]
-//   Flight    Flight[]
-// }
