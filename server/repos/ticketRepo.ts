@@ -78,7 +78,7 @@ export const ticketRepo = {
     ticketsExtended.sort((a, b) => {
       switch (sort) {
         case 'duration':
-          return b.totalDuration - a.totalDuration; // sort by duration
+          return a.totalDuration - b.totalDuration; // sort by duration
         case 'optimal':
           return Number(a.optimalIdx) - Number(b.optimalIdx); // sort by custom coefficient K
         default:
