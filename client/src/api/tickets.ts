@@ -10,7 +10,6 @@ const injectedRtkApi = api.injectEndpoints({
     listTickets: query<SearchResults<ITicket>, ITicketListFilters>({
       query: (params) => ({ url: path, params }),
       providesTags: [type],
-      keepUnusedDataFor: 0,
     }),
     getTicket: query<ITicket, string | undefined>({
       query: (id) => `${path}/${id}`,

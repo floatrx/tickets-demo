@@ -19,7 +19,11 @@
 }
 
 .wrapper {
-    @apply relative size-[60px] flex items-center justify-center;
+    @apply relative size-[60px] flex items-center justify-center transition-all duration-300 ease-in-out;
+
+    &:hover {
+        @apply drop-shadow-lg scale-110 -rotate-3;
+    }
 }
 
 .globe {
@@ -31,3 +35,9 @@
 
     animation: fly ease 0.5s both;
 }
+
+
+
+
+
+
