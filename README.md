@@ -96,4 +96,4 @@ The search form allows users to filter tickets by "transfers" (0-3-all) count an
 
 ## Screenshots
 
-![image](screenshots/screen-1.png)
+![image](screenshots/screen-1.jpg)
