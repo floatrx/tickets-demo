@@ -73,7 +73,7 @@ export const TicketsList = () => {
         />
         <div>
           {tickets?.map((ticket) => <TicketCard key={ticket.id} ticket={ticket} />)}
-          {total > tickets.length && (
+          {count > tickets.length && (
             <button className={cn(s.more, 'button button-primary')} onClick={() => setLimit((prev) => prev + 5)}>
               Load more
             </button>
