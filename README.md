@@ -6,7 +6,7 @@ Demo: [https://tickets.floatrx.net/](https://tickets.floatrx.net/)
 
 Server: `Node`, `Express`, `SQLite`, `Prisma`
 
-Client: `React`, `Redux`, `Redux toolkit`, `ShadCN`, `TailwindCSS`
+Client: `React`, `Redux/Redux toolkit`, `ShadCN`, `TailwindCSS`
 
 ## Installation
 
@@ -14,26 +14,36 @@ Client: `React`, `Redux`, `Redux toolkit`, `ShadCN`, `TailwindCSS`
 2. Install the dependencies
 
 ```bash
+# Global
 yarn
-```
 
-3. Create a `.env` file in `client`/`server` directories
+# Client
+cd client
+yarn install
+cp .env.example .env
 
-```bash
+# Server
+cd ../server
+yarn install
 cp .env.example .env
 ```
 
-4. Run the server & client
+3. Run the server & client
 
 ```bash
 yarn dev
 ```
 
 ### Check database
+
 ```bash
 cd server
 yarn db:view
 ```
+
+> [!NOTE]
+>
+> The database is stored in the `server/prisma/data.db` file and included in the repository.
 
 # Comments
 
@@ -44,7 +54,7 @@ Express is used to create the server, Prisma is used to interact with the databa
 
 1. `[GET] /api/tickets` - returns a list of tickets with optional query parameters `sort`, and `filter`. All filters and sorts are applied on the server side. `Optimal index` is calculated as the sum of the flight duration and the number of transfers.
 2. `[POST] /api/tickets` - creates a ticket (no UI for this endpoint at this moment)
-   Example create ticket request (no payload validation at this moment):
+   Example create ticket request (payload validation is implemented on the server side with `zod`):
 
 ```json
 {
@@ -93,8 +103,8 @@ The search form allows users to filter tickets by "transfers" (0-3-all) count an
 
 ### Backend:
 
--   [x] Search tickets
--   [x] Filter & sort tickets
+-   [x] Search tickets → Filter & Sort + Validation
+-   [x] Create a ticket API + Validation
 
 ### Frontend:
 
