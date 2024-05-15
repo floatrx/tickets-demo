@@ -3,7 +3,7 @@ import { Ghost } from 'lucide-react';
 export const NotFound = () => (
   <div className="space-y-4 text-center sm:text-xl">
     <h1 className="flex flex-col items-center">
-      <Ghost size={80} className="text-cyan-500" />
+      <Ghost size={80} className="text-primary" />
       <br />
       <span className="text-2xl font-bold sm:text-4xl">404 - Not Found!</span>
     </h1>
