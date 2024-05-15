@@ -11,7 +11,7 @@ const prismaClientSingleton = (): PrismaClient => {
     globalThis.prisma = new PrismaClient().$extends({
       query: {
         ticket: {
-          async create({ args, model, operation, query }) {
+          async create({ args, query }) {
             // Add custom logic here
             const flights = args.data.flights?.create;
 
