@@ -1,7 +1,10 @@
 import { prisma } from '@/lib/prisma';
 import { transformFlights } from '@/lib/transform';
-import type { ITicketFilters, TicketCreateBody } from '@/types';
-import type { Prisma, Ticket } from '@prisma/client';
+import { Prisma } from '@prisma/client';
+
+import TicketOrderByWithRelationInput = Prisma.TicketOrderByWithRelationInput;
+import type { ITicketFilters, ITicketSort, TicketCreateBody } from '@/types';
+import type { Ticket } from '@prisma/client';
 
 // Include related data in the response
 const include: Prisma.TicketInclude = {
@@ -19,7 +22,7 @@ const include: Prisma.TicketInclude = {
 /**
  * Post CRUD operations
  */
-export const ticketRepo = {
+export const ticketRepository = {
   create(body: TicketCreateBody) {
     const { flights, airlineId, price = 0 } = body;
     return prisma.ticket.create({
@@ -62,45 +65,28 @@ export const ticketRepo = {
           }
         : {};
 
-    // Query
+    /**
+     * Sort by price, duration, or optimal index
+     * @param sort = 'price' (default) | 'duration' | 'optimal'
+     */
+    const order: Record<ITicketSort, TicketOrderByWithRelationInput> = {
+      price: { price: 'asc' },
+      duration: { totalDuration: 'asc' },
+      optimal: { optimalIndex: 'asc' },
+    };
+
+    // Get the total number of tickets based on the filter
     const ticketsCount = await prisma.ticket.count({ where }); // Get the total number of tickets
+
+    // Query tickets
     const tickets = await prisma.ticket.findMany({
       include,
       where,
+      orderBy: order[sort || 'price'],
       take: Number(limit) || 5, // Limit the number of tickets
     });
 
-    // Map tickets to include total duration
-    let ticketsExtended = tickets.map(({ id, ...ticket }) => {
-      const totalDuration = ticket.flights.reduce((acc, flight) => acc + (flight.duration || 0), 0);
-
-      // Calculate the custom coefficient optimalIdx
-      const optimalIdx = (totalDuration / 1000000 + 2 * ticket.totalTransfers + 3 * ticket.price).toFixed();
-
-      return {
-        id,
-        optimalIdx,
-        totalDuration,
-        ...ticket,
-      };
-    });
-
-    /**
-     * Sort tickets
-     * @param sort = 'price' | 'duration' | 'optimal'
-     */
-    ticketsExtended.sort((a, b) => {
-      switch (sort) {
-        case 'duration':
-          return a.totalDuration - b.totalDuration; // sort by duration
-        case 'optimal':
-          return Number(a.optimalIdx) - Number(b.optimalIdx); // sort by custom coefficient K
-        default:
-          return a.price - b.price; // sort by price
-      }
-    });
-
-    return { data: ticketsExtended, total: ticketsTotal, count: ticketsCount };
+    return { data: tickets, total: ticketsTotal, count: ticketsCount };
   },
   update(id: number, data: Omit<Ticket, 'id'>) {
     return prisma.ticket.update({ where: { id }, data, include });

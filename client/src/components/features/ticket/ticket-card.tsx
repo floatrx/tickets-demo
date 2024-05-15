@@ -40,13 +40,13 @@ export const TicketCard: FC<IProps> = ({ ticket }) => {
         <CardFooter>
           <div className={s.footer}>
             <div>
-              Total duration:{' '}
+              Duration:{' '}
               <strong>
                 <Duration value={totalDuration} />
               </strong>
             </div>
             <div>
-              Optimal idx: <strong>{ticket.optimalIdx}</strong>
+              Optimal idx: <strong>{ticket.optimalIndex}</strong>
             </div>
           </div>
         </CardFooter>

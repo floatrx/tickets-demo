@@ -1,9 +1,9 @@
-import { diffBetweenDates } from '@/lib/transform';
+import { calculateDiffBetweenDates } from '@/lib/utils';
 import { Prisma, PrismaClient } from '@prisma/client';
 
-console.log('Seeding database...');
+import { prisma } from '@/lib/prisma';
 
-const prisma = new PrismaClient();
+console.log('Seeding database...');
 
 const countries: Prisma.CountryCreateInput[] = [
   { code: 'LHR', name: 'London', description: 'London' },
@@ -17,37 +17,29 @@ const airlines: Prisma.AirlineCreateInput[] = [
   { name: 'Emirates', logo: 'emirates.svg' },
 ];
 
-const flights: Prisma.FlightCreateInput[] = [
-  {
-    number: 'F4U-001',
-    departureTime: new Date('2022-01-01T00:00:00Z'),
-    arrivalTime: new Date('2022-01-01T08:00:00Z'),
-    duration: diffBetweenDates(new Date('2022-01-01T00:00:00Z'), new Date('2022-01-01T08:00:00Z')),
-    transfers: { connect: [{ id: 3 }] }, // HKG
-    from: { connect: { id: 1 } }, // LHR
-    to: { connect: { id: 2 } }, // DXB
-  },
-  {
-    number: 'F4U-002',
-    departureTime: new Date('2022-01-02T10:00:00Z'),
-    arrivalTime: new Date('2022-01-02T18:00:00Z'),
-    duration: diffBetweenDates(new Date('2022-01-02T10:00:00Z'), new Date('2022-01-02T18:00:00Z')),
-    transfers: { connect: [{ id: 3 }] }, // HKG
-    from: { connect: { id: 2 } }, // DXB
-    to: { connect: { id: 1 } }, // LHR
-  },
-];
-
 const tickets: Prisma.TicketCreateInput[] = [
   {
     price: 13300,
     airline: { connect: { id: 1 } }, // Airline4Europe
-    totalTransfers: 1,
     flights: {
       // Attach flights to the ticket
-      connect: [
-        { id: 1 }, // F4U-001
-        { id: 2 }, // F4U-002
+      create: [
+        {
+          number: 'F4U-001',
+          departureTime: new Date('2022-01-01T00:00:00Z'),
+          arrivalTime: new Date('2022-01-01T08:00:00Z'),
+          transfers: { connect: [{ id: 3 }] }, // HKG
+          from: { connect: { id: 1 } }, // LHR
+          to: { connect: { id: 2 } }, // DXB
+        },
+        {
+          number: 'F4U-002',
+          departureTime: new Date('2022-01-02T10:00:00Z'),
+          arrivalTime: new Date('2022-01-02T18:00:00Z'),
+          transfers: { connect: [{ id: 3 }] }, // HKG
+          from: { connect: { id: 2 } }, // DXB
+          to: { connect: { id: 1 } }, // LHR
+        },
       ],
     },
   },
@@ -59,11 +51,6 @@ async function main() {
   // Create countries and airlines
   await prisma.country.createMany({ data: countries });
   await prisma.airline.createMany({ data: airlines });
-
-  // Create flights
-  for (const flight of flights) {
-    await prisma.flight.create({ data: flight });
-  }
 
   // Create tickets
   for (const ticket of tickets) {

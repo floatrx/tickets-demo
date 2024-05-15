@@ -19,5 +19,5 @@
 }
 
 .footer {
-    @apply grid grid-cols-3 gap-4;
+    @apply flex gap-4 justify-between w-full text-muted-foreground text-sm;
 }

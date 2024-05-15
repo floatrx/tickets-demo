@@ -41,8 +41,10 @@ model Flight {
 model Ticket {
   id             Int      @id @default(autoincrement())
   flights        Flight[] @relation("FlightTickets") // Many-to-many relation
-  totalTransfers Int
   price          Int
   airline        Airline  @relation("TicketAirline", fields: [airlineId], references: [id])
   airlineId      Int
+  totalTransfers Int?
+  totalDuration  Int?
+  optimalIndex   Int?
 }

@@ -13,7 +13,7 @@ export interface ITicket {
   flights: FlightDetailsExtended[];
   totalDuration: number;
   totalTransfers: number;
-  optimalIdx: number; // custom coefficient for optimal sorting
+  optimalIndex: number; // custom coefficient for optimal sorting
 }
 
 export interface ITicketCreate {
