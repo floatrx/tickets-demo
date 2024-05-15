@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { ticketRepository } from '@/repositories/ticketRepository';
 
-import type { ITicketFilters, TicketCreateBody } from '@/types';
+import type { ITicketFilters, TicketCreateBody } from '@/types/ticket';
 import type { Ticket } from '@prisma/client';
 import type { Request, Response } from 'express';
 

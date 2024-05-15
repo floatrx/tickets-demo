@@ -12,6 +12,12 @@
     .more {
         @apply w-full;
     }
+
+    .footer {
+        .count {
+            @apply text-muted-foreground text-sm text-center my-2;
+        }
+    }
 }
 
 .spinner {

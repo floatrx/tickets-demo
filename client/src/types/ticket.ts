@@ -1,6 +1,6 @@
 import type { CreateFlightBody, FlightDetailsExtended } from '@/types/flight';
 
-interface Airline {
+interface IAirline {
   id: number;
   name: string;
   logo: string;
@@ -9,7 +9,7 @@ interface Airline {
 export interface ITicket {
   id: number;
   price: number;
-  airline: Airline;
+  airline: IAirline;
   flights: FlightDetailsExtended[];
   totalDuration: number;
   totalTransfers: number;
@@ -21,12 +21,13 @@ export interface ITicketCreate {
   flights: [CreateFlightBody, CreateFlightBody?];
 }
 
-export type ITicketSort = 'price' | 'duration' | 'transfers' | 'optimal' | null;
-export type TicketFilter = 'all' | 'transfers' | null;
+export type TTicketSort = 'price' | 'duration' | 'transfers' | 'optimal' | null;
+export type TTicketFilter = 'all' | 'transfers' | null;
+export type TTicketTransferCount = number[] | null;
 
-export interface ITicketListFilters {
-  limit?: number;
-  sort: ITicketSort;
-  filter?: TicketFilter;
-  transferCount?: number[] | null;
+export interface ITicketListSearchParams {
+  limit?: number | null;
+  sort: TTicketSort;
+  filter?: TTicketFilter;
+  transferCount?: TTicketTransferCount;
 }

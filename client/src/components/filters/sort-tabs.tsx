@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils';
-import type { ITicketSort } from '@/types/ticket';
+import type { TTicketSort } from '@/types/ticket';
 import { useCallback, useState } from 'react';
 
 // Styles
@@ -7,20 +7,20 @@ import s from './sort-tabs.module.css';
 
 interface IProps {
   className?: string;
-  onChange?: (value: ITicketSort) => void;
+  onChange?: (value: TTicketSort) => void;
 }
 
-const variants: { label: string; value: ITicketSort }[] = [
+const variants: { label: string; value: TTicketSort }[] = [
   { label: 'Cheaper', value: 'price' },
   { label: 'Faster', value: 'duration' },
   { label: 'Optimal', value: 'optimal' },
 ];
 
 export const SortTabs: FC<IProps> = ({ onChange, className }) => {
-  const [value, setValue] = useState<ITicketSort>('price');
+  const [value, setValue] = useState<TTicketSort>('price');
 
   const handleChange = useCallback(
-    (value: ITicketSort) => {
+    (value: TTicketSort) => {
       setValue(value);
       onChange?.(value);
     },

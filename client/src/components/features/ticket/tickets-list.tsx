@@ -1,28 +1,27 @@
-import { ArrowLeftToLine } from 'lucide-react';
 import { useState } from 'react';
 import { useMediaQuery } from 'usehooks-ts';
-import { useListTicketsQuery } from '@/api/tickets';
-import { TicketCard } from '@/components/features/ticket/ticket-card';
+import { ArrowLeftToLine } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { Card, CardHeader } from '@/components/ui/card';
 import { FilterTransfers } from '@/components/filters/filter-transfers';
 import { SortTabs } from '@/components/filters/sort-tabs';
-import { Card, CardHeader } from '@/components/ui/card';
 import { Spinner } from '@/components/ui/spinner';
-import { cn } from '@/lib/utils';
-import type { ITicketSort, TicketFilter } from '@/types/ticket';
+import { TicketCard } from '@/components/features/ticket/ticket-card';
+import { useListTicketsQuery } from '@/api/tickets';
+import type { TTicketFilter, TTicketSort, TTicketTransferCount } from '@/types/ticket';
 
 // Styles
 import s from './tickets-list.module.css';
 
 /**
  * Main component to display tickets list with filters and sorting
- * @constructor
  */
 export const TicketsList = () => {
   // Filters and sorting
-  const [sort, setSort] = useState<ITicketSort>(null);
-  const [filter, setFilter] = useState<TicketFilter>(null);
-  const [transferCount, setTransferCount] = useState<number[] | null>(null);
-  const [limit, setLimit] = useState(5);
+  const [sort, setSort] = useState<TTicketSort>(null);
+  const [filter, setFilter] = useState<TTicketFilter>(null);
+  const [transferCount, setTransferCount] = useState<TTicketTransferCount>(null);
+  const [limit, setLimit] = useState<number | null>(null);
 
   // Collapsible filters
   const [showFilters, setShowFilters] = useState(true);
@@ -38,12 +37,15 @@ export const TicketsList = () => {
     setTransferCount(filters.length ? filters : null);
   };
 
-  if (!searchResults)
+  const loadMoreTickets = () => setLimit((prev) => (prev ?? 5) + 5);
+
+  if (!searchResults) {
     return (
       <div className={s.spinner}>
         <Spinner spinning size="xl" />
       </div>
     );
+  }
 
   const { data: tickets, total, count } = searchResults;
 
@@ -64,22 +66,25 @@ export const TicketsList = () => {
         </Card>
       </aside>
 
-      <div className={s.main}>
+      <section className={s.main}>
         <SortTabs
           className={s.sort}
           onChange={(value) => {
-            setSort(value as ITicketSort);
+            setSort(value as TTicketSort);
           }}
         />
-        <div>
-          {tickets?.map((ticket) => <TicketCard key={ticket.id} ticket={ticket} />)}
-          {count > tickets.length && (
-            <button className={cn(s.more, 'button button-primary')} onClick={() => setLimit((prev) => prev + 5)}>
+        <div>{tickets?.map((ticket) => <TicketCard key={ticket.id} ticket={ticket} />)}</div>
+        {count > tickets.length && (
+          <footer className={s.footer}>
+            <div className={s.count}>
+              Shown {tickets.length} of {count} tickets
+            </div>
+            <button className={cn(s.more, 'button button-primary')} onClick={loadMoreTickets}>
               Load more
             </button>
-          )}
-        </div>
-      </div>
+          </footer>
+        )}
+      </section>
     </div>
   );
 };

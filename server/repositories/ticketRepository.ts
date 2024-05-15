@@ -3,7 +3,7 @@ import { transformFlights } from '@/lib/transform';
 import { Prisma } from '@prisma/client';
 
 import TicketOrderByWithRelationInput = Prisma.TicketOrderByWithRelationInput;
-import type { ITicketFilters, ITicketSort, TicketCreateBody } from '@/types';
+import type { ITicketFilters, ITicketSort, TicketCreateBody } from '@/types/ticket';
 import type { Ticket } from '@prisma/client';
 
 // Include related data in the response

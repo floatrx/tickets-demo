@@ -1,4 +1,4 @@
-import type { FlightCreateBody } from '@/types';
+import type { FlightCreateBody } from '@/types/flight';
 import { Prisma } from '@prisma/client';
 
 type TransformFlightFn = (body: FlightCreateBody) => Prisma.FlightCreateInput;
