@@ -1,10 +1,16 @@
 import { prisma } from '@/lib/prisma';
 import { transformFlights } from '@/lib/transform';
-import { Prisma } from '@prisma/client';
-
-import TicketOrderByWithRelationInput = Prisma.TicketOrderByWithRelationInput;
-import type { ITicketFilters, ITicketSort, TicketCreateBody } from '@/types/ticket';
+import type {
+  ITicketCreateResponse,
+  ITicketFilters,
+  ITicketSearchResponse,
+  ITicketSort,
+  TicketCreateBody,
+} from '@/types/ticket';
 import type { Ticket } from '@prisma/client';
+import { Prisma } from '@prisma/client';
+import TicketOrderByWithRelationInput = Prisma.TicketOrderByWithRelationInput;
+import TicketWhereInput = Prisma.TicketWhereInput;
 
 // Include related data in the response
 const include: Prisma.TicketInclude = {
@@ -20,10 +26,17 @@ const include: Prisma.TicketInclude = {
 };
 
 /**
- * Post CRUD operations
+ * Ticket CRUD operations
  */
 export const ticketRepository = {
-  create(body: TicketCreateBody) {
+  getFlightsByNumbers(flightNumbers: string[]) {
+    return prisma.flight.findMany({ where: { number: { in: flightNumbers } } });
+  },
+  /**
+   * Create a new ticket
+   * @param body
+   */
+  create(body: TicketCreateBody): Promise<ITicketCreateResponse> {
     const { flights, airlineId, price = 0 } = body;
     return prisma.ticket.create({
       include, // Include the related data
@@ -37,10 +50,19 @@ export const ticketRepository = {
       },
     });
   },
+  /**
+   * Get a ticket by ID
+   * @param id
+   */
   get(id: string) {
     return prisma.ticket.findUnique({ where: { id: Number(id) }, include });
   },
-  async list(query: ITicketFilters) {
+  /**
+   * Search for tickets based on filters and sorting
+   * @param query = { sort, filter, transferCount, limit }
+   * @example `api/tickets?sort=price&filter=transfers&transferCount=1&limit=5` - Get tickets sorted by price with only 1 transfer
+   */
+  async search(query: ITicketFilters): Promise<ITicketSearchResponse> {
     /**
      * Get search params from request
      * @param sort = 'price' (default) | 'duration' | 'optimal'
@@ -56,7 +78,7 @@ export const ticketRepository = {
      * @param filter = 'transfers'
      * @param transferCount = ['0', '1', '2', '3'] string[] | 0 or 1 or 2 or 3 (number)
      */
-    const where =
+    const where: TicketWhereInput =
       filter === 'transfers' && transferCount
         ? {
             totalTransfers: {
@@ -88,9 +110,18 @@ export const ticketRepository = {
 
     return { data: tickets, total: ticketsTotal, count: ticketsCount };
   },
+  /**
+   * Update a ticket by ID
+   * @param id
+   * @param data
+   */
   update(id: number, data: Omit<Ticket, 'id'>) {
     return prisma.ticket.update({ where: { id }, data, include });
   },
+  /**
+   * Remove a ticket by ID
+   * @param id
+   */
   remove(id: number) {
     return prisma.ticket.delete({ where: { id } });
   },

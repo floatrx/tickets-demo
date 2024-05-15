@@ -1,7 +1,7 @@
-import type { FlightCreateBody } from '@/types/flight';
+import type { TicketFlightCreateBody } from '@/types/ticket';
 import { Prisma } from '@prisma/client';
 
-type TransformFlightFn = (body: FlightCreateBody) => Prisma.FlightCreateInput;
+type TransformFlightFn = (body: TicketFlightCreateBody) => Prisma.FlightCreateInput;
 
 /**
  * Transform flight data for Prisma

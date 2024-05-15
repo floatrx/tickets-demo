@@ -1,3 +1,4 @@
+import { IS_PROD } from '@/config/const';
 import { calculateDiffBetweenDates, calculateOptimalIndex } from '@/lib/utils';
 import { PrismaClient } from '@prisma/client';
 
@@ -8,7 +9,9 @@ const prismaClientSingleton = (): PrismaClient => {
   if (!globalThis.prisma) {
     // Assign a new instance if it doesn't exist
     // @ts-ignore
-    globalThis.prisma = new PrismaClient().$extends({
+    globalThis.prisma = new PrismaClient({
+      errorFormat: 'minimal',
+    }).$extends({
       query: {
         ticket: {
           async create({ args, query }) {
