@@ -45,6 +45,32 @@ yarn db:view
 >
 > The database is stored in the `server/prisma/data.db` file and included in the repository.
 
+# Docker
+```bash
+# Build the app
+docker compose build
+
+# or rebuild the app and run
+docker compose up --build
+
+# Run the app
+docker compose up -d
+
+# Check logs
+docker compose logs -f
+
+# Stop the app
+docker compose down
+
+# Remove the app
+docker compose down --volumes
+```
+
+## Check the app
+http://localhost:3001/api/test - server
+
+http://localhost:3000 - client
+
 # Comments
 
 This app is a fullstack app that uses SQLite as the database. The server is built with Node, Express, and Prisma. The client is built with React, Redux, Redux toolkit, ShadCN, and TailwindCSS.

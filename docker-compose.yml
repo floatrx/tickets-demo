@@ -1,0 +1,25 @@
+services:
+  client:
+    environment:
+      - NODE_ENV=production
+      - VITE_PORT=3001
+      - VITE_API_BASE_URL=http://localhost:3000/api
+    build:
+      context: ./client
+    ports:
+      - "3001:3001"
+    depends_on:
+      - server
+
+  server:
+    environment:
+      - PORT=3000
+      - NODE_ENV=production
+      - DATABASE_URL=file:./data.db
+    build:
+      context: ./server
+    volumes:
+      - ./server:/app
+    command: sh -c "yarn install && npx prisma generate && yarn db:push && yarn start"
+    ports:
+      - "3000:3000"
