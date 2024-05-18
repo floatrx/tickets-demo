@@ -154,3 +154,68 @@ index".
 ## Screenshots
 
 ![image](screenshots/screen-1.jpg)
+
+## Deployment to VPS
+### Approach 1: Proxy api location 
+1. Using `pm2` run the server (API). Check the `server/ecosystem.config.js` file for configuration. Check the `PORT` in configuration. Default is `3011`.
+2. Build the client (React) and serve the static files using `nginx`. Check the `client/.env` file for the `REACT_APP_API_URL` variable. Default is `/api` (nginx: `proxy_pass`).
+```nginx configuration
+server {
+    server_name tickets.floatrx.net;
+
+    root /var/www/tickets;
+    index index.html;
+
+    # Gzip compression
+    gzip on;
+    gzip_types text/plain application/javascript text/css application/json application/x-font-ttf font/opentype image/svg+xml;
+    gzip_min_length 256;
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    # Cache static files
+    location ~* \.(?:ico|css|js|gif|jpe?g|png|woff2?|eot|ttf|svg)$ {
+        expires 1y;
+        add_header Cache-Control "public, no-transform";
+    }
+
+    # Ensure index.html is not cached
+    location = /index.html {
+        add_header Cache-Control "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0";
+    }
+
+    # Proxy API
+    location /api/ {
+	proxy_pass http://127.0.0.1:3011/api/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+```
+### Approach 2: Server and Client with different domains
+Instead of `location /api/` use a separate domain for the API:
+```nginx configuration
+server {
+    server_name tickets-api.floatrx.net;
+
+    location / {
+        proxy_pass http://127.0.0.1:3011;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+
+    access_log /var/log/nginx/tickets-api-access.log;
+    error_log /var/log/nginx/tickets-api-error.log;
+}
+
+```
+
+> [!NOTE]
+> Use `certbot` to generate SSL certificates and configure HTTPS.
