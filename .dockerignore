@@ -1,1 +1,26 @@
-*/node_modules
+# Exclude node_modules directories
+node_modules
+
+# Exclude any local environment files
+.env
+.env.local
+.env.*.local
+
+# Exclude build directories
+dist
+build
+
+# Exclude logs
+*.log
+logs
+
+# Exclude Docker-specific files
+.dockerignore
+Dockerfile
+docker-compose.yml
+
+# Other exclusions
+.git
+.vscode
+.idea
+.DS_Store

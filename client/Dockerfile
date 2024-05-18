@@ -12,6 +12,7 @@ RUN yarn install
 
 # Copy the rest of the application code
 COPY . .
+COPY .env.docker .env
 
 # Build the application
 RUN yarn build
