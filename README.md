@@ -1,5 +1,9 @@
 # Project: Fullstack App - Aviasales
 
+> [!WARNING]
+> This project was created to complete a test assignment demonstrating the work of a full-stack application using `React` / `Redux` + `Express` + `Prisma`... The functionality was implemented **according to the test assignment requirements**. This project is not a full-fledged application but merely a demonstration of the solution to the given task.
+
+
 ## Description
 
 Demo: [https://tickets.floatrx.net/](https://tickets.floatrx.net/)
